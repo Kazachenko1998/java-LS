@@ -55,6 +55,7 @@ public class ls {
         String[] result = input.split(" ");
         return split_flag(result);
     }
+
     private static String[] split_flag(String[] result) {
         String[] result2 = new String[]{"0", "0", "0", null, null};
         for (int i = 1; i < result.length; i++)
@@ -71,14 +72,14 @@ public class ls {
                         break;
                     case "-o": {
                         if (result.length >= i)
-                            result2[3] = result[i+1];
+                            result2[3] = result[i + 1];
                         break;
                     }
                     default:
                         break;
                 }
             }
-        result2[4] = result[result.length-1];
+        result2[4] = result[result.length - 1];
         return result2;
     }
 
@@ -149,7 +150,6 @@ public class ls {
         }
         return "";
     }
-
 
     private static String commandLine(String[] line) {
         if (line.length == 0) throw new IllegalArgumentException("неверная команда");
@@ -222,17 +222,15 @@ public class ls {
     public static void main(String[] D) throws Exception {
 //     BufferedReader reader = new BufferedReader( new InputStreamReader(System.in));
 //       String input = reader.readLine();
-//        String[] input2 = D;
-//        for (int i = 0;i<D.length;i++)
-//            System.out.println(D[i]);
-        String input = "ls -l -h -o help C:\\";
-        System.out.print(commandLine("ls -o __f testIn\\Ace_Stream_Media_3.1.2.exe"));
-        System.out.print(commandLine("ls -l -o l_f testIn\\Ace_Stream_Media_3.1.2.exe"));
-        System.out.print(commandLine("ls -l -h -o lhf testIn\\Ace_Stream_Media_3.1.2.exe"));
-        System.out.print(commandLine("ls  -o __d testIn"));
-        System.out.print(commandLine("ls -l  -o l_d testIn"));
-        System.out.print(commandLine("ls -l -h -o lhd testIn"));
-        //       System.out.print(commandLine(D));
+//        String[] input2 = D;  //ввод из консоли
 
+//       String input = "ls -l -h -o help C:\\"; //ввод из этой строки
+        System.out.print(commandLine("ls -r -o testOut\\__fr testIn\\Ace_Stream_Media_3.1.2.exe"));
+        System.out.print(commandLine("ls -r -l -o testOut\\l_fr testIn\\Ace_Stream_Media_3.1.2.exe"));
+        System.out.print(commandLine("ls -r -l -h -o testOut\\lhfr testIn\\Ace_Stream_Media_3.1.2.exe"));
+        System.out.print(commandLine("ls -r  -o testOut\\__dr testIn"));
+        System.out.print(commandLine("ls -r -l  -o testOut\\l_dr testIn"));
+        System.out.print(commandLine("ls -r -l -h -o testOut\\lhdr testIn"));
+//      System.out.print(commandLine(D)); //ввод из ком.строки
     }
 }

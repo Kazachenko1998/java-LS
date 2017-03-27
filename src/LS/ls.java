@@ -51,165 +51,97 @@ public class ls {
         return "  последние изменение " + sdf.format(date) + "  ";
     }
 
-    private static String[] split_flag(String input) {
-        String[] result = input.split(" ");
-        return split_flag(result);
-    }
-
-    private static String[] split_flag(String[] result) {
-        String[] result2 = new String[]{"0", "0", "0", null, null};
-        for (int i = 1; i < result.length; i++)
-            if (result[i].length() != 0) {
-                switch (result[i]) {
-                    case "-l":
-                        result2[0] = "1";
-                        break;
-                    case "-h":
-                        result2[1] = "1";
-                        break;
-                    case "-r":
-                        result2[2] = "1";
-                        break;
-                    case "-o": {
-                        if (result.length >= i)
-                            result2[3] = result[i + 1];
-                        break;
-                    }
-                    default:
-                        break;
-                }
-            }
-        result2[4] = result[result.length - 1];
-        return result2;
-    }
-
-    public static String commandLine(String line) {
-        if (line.length() < 2) throw new IllegalArgumentException("неверная команда");
-        if (!(((line.charAt(0) == 'l') || (line.charAt(0) == 'L')) && ((line.charAt(1) == 's') || (line.charAt(1) == 'S'))))
-            throw new IllegalArgumentException("неверная команда");
-        String result = new String();
-        File file = new File(split_flag(line)[4]);
+    private static ArrayList<String> builder(File file) {
+        ArrayList<String> list = new ArrayList<>();
         String[] str = file.list();
-        if (file.isFile()) str = new String[]{split_flag(line)[4]};
-        String[] flags = split_flag(line);
+        if (file.isDirectory()) for (int i = 0; i < str.length; i++) {
+            list.add(str[i]);
+             }
+        if (file.isFile()) list.add(file.getPath());
+        return list;
+    }
+
+    private static ArrayList<String> builderL(File file) {
+        String[] str = file.list();
         ArrayList<String> list = new ArrayList<>();
         int size = 0;
-        try {
-            for (int i = 0; i < str.length; i++) {
+          if (file.isDirectory())  for (int i = 0; i < str.length; i++)
                 if (str[i].length() > size) size = str[i].length();
-            }
-        } catch (NullPointerException ex) {
-            throw new NullPointerException("неверный входной путь");
-        }
         if (file.isDirectory()) for (int i = 0; i < str.length; i++) {
             String space = new String();
             for (int j = str[i].length(); j < size + 1; j++)
                 space += " ";
-            if (flags[0] == "0") list.add(str[i]);
-            if ((flags[0] == "1") && (flags[1] == "0")) list.add(
+            list.add(
                     file.getPath() + "\\" + str[i] + space + " " +
                             accessBite(new File(file.getPath() + "\\" + str[i])) + " "
                             + (new File(file.getPath() + "\\" + str[i])).lastModified() + " "
                             + sizeFile(new File(file.getPath() + "\\" + str[i])));
-            if ((flags[0] == "1") && (flags[1] == "1")) list.add(
+        }
+        if (file.isFile()) {
+            list.add(
+                    file.getPath()  + "  " +
+                            accessBite(file) + " "
+                            + file.lastModified() + " "
+                            + sizeFile(file));
+            }
+        return list;
+    }
+
+    private static ArrayList<String> builderLH(File file) {
+        ArrayList<String> list = new ArrayList<>();
+        String[] str = file.list();
+        int size = 0;
+
+         if (file.isDirectory())  for (int i = 0; i < str.length; i++)
+                if (str[i].length() > size) size = str[i].length();
+        if (file.isDirectory()) for (int i = 0; i < str.length; i++) {
+            String space = new String();
+            for (int j = str[i].length(); j < size + 1; j++)
+                space += " ";
+           list.add(
                     str[i] + space + " " +
                             accessHuman(new File(file.getPath() + "\\" + str[i])) + " "
                             + data(new File(file.getPath() + "\\" + str[i])) + " "
                             + sizeFileHuman(new File(file.getPath() + "\\" + str[i])));
         }
-        if (file.isFile()) for (int i = 0; i < str.length; i++) {
-            String space = new String();
-            for (int j = str[i].length(); j < size + 1; j++)
-                space += " ";
-            if (flags[0] == "0") list.add(str[i]);
-            if ((flags[0] == "1") && (flags[1] == "0")) list.add(
-                    file.getPath() + space + " " +
-                            accessBite(file) + " "
-                            + file.lastModified() + " "
-                            + sizeFile(file));
-            if ((flags[0] == "1") && (flags[1] == "1")) list.add(
-                    str[i] + space + " " +
+        if (file.isFile())  {
+           list.add(
+                   file.getPath() +  "  " +
                             accessHuman(file) + " "
                             + data(file) + " "
                             + sizeFileHuman(file));
         }
-        if (flags[2] == "1") for (int i = list.size() - 1; i >= 0; i--)
-            result += list.get(i) + "\n";
-        else for (int i = 0; i < list.size(); i++)
-            result += list.get(i) + "\n";
-        if (flags[3] == null)
-            return result;
-        else {
-            try (
-                    FileWriter writer = new FileWriter(flags[3], false)) {
-                writer.write(result);
-                writer.flush();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-        return "";
+        return list;
     }
 
     private static String commandLine(String[] line) {
+        FlagArg flagArg = new FlagArg(line);
         if (line.length == 0) throw new IllegalArgumentException("неверная команда");
-        if (!(line[0].equals("ls")))
-            throw new IllegalArgumentException("неверная команда");
         String result = new String();
-        File file = new File(split_flag(line)[4]);
+        File file = new File(flagArg.getInput());
         String[] str = file.list();
-        if (file.isFile()) str = new String[]{split_flag(line)[4]};
-        String[] flags = split_flag(line);
-        ArrayList<String> list = new ArrayList<>();
-        int size = 0;
+        ArrayList<String> list;
+        if (file.isDirectory())
         try {
             for (int i = 0; i < str.length; i++) {
-                if (str[i].length() > size) size = str[i].length();
+                if (str[i].length() > 0);
             }
         } catch (NullPointerException ex) {
             throw new NullPointerException("неверный входной путь");
         }
-        if (file.isDirectory()) for (int i = 0; i < str.length; i++) {
-            String space = new String();
-            for (int j = str[i].length(); j < size + 1; j++)
-                space += " ";
-            if (flags[0] == "0") list.add(str[i]);
-            if ((flags[0] == "1") && (flags[1] == "0")) list.add(
-                    file.getPath() + "\\" + str[i] + space + " " +
-                            accessBite(new File(file.getPath() + "\\" + str[i])) + " "
-                            + (new File(file.getPath() + "\\" + str[i])).lastModified() + " "
-                            + sizeFile(new File(file.getPath() + "\\" + str[i])));
-            if ((flags[0] == "1") && (flags[1] == "1")) list.add(
-                    str[i] + space + " " +
-                            accessHuman(new File(file.getPath() + "\\" + str[i])) + " "
-                            + data(new File(file.getPath() + "\\" + str[i])) + " "
-                            + sizeFileHuman(new File(file.getPath() + "\\" + str[i])));
-        }
-        if (file.isFile()) for (int i = 0; i < str.length; i++) {
-            String space = new String();
-            for (int j = str[i].length(); j < size + 1; j++)
-                space += " ";
-            if (flags[0] == "0") list.add(str[i]);
-            if ((flags[0] == "1") && (flags[1] == "0")) list.add(
-                    file.getPath() + space + " " +
-                            accessBite(file) + " "
-                            + file.lastModified() + " "
-                            + sizeFile(file));
-            if ((flags[0] == "1") && (flags[1] == "1")) list.add(
-                    str[i] + space + " " +
-                            accessHuman(file) + " "
-                            + data(file) + " "
-                            + sizeFileHuman(file));
-        }
-        if (flags[2] == "1") for (int i = list.size() - 1; i >= 0; i--)
+
+        if ((flagArg.isH())&&(flagArg.isL())) list = builderLH(file); else
+        if (flagArg.isL()) list = builderL(file);else
+            list = builder(file);
+        if (flagArg.isR()) for (int i = list.size() - 1; i >= 0; i--)
             result += list.get(i) + "\n";
         else for (int i = 0; i < list.size(); i++)
             result += list.get(i) + "\n";
-        if (flags[3] == null)
+        if (flagArg.getOutput() == null)
             return result;
         else {
             try (
-                    FileWriter writer = new FileWriter(flags[3], false)) {
+                    FileWriter writer = new FileWriter(flagArg.getOutput(), false)) {
                 writer.write(result);
                 writer.flush();
             } catch (IOException ex) {
@@ -218,19 +150,10 @@ public class ls {
         }
         return "";
     }
-
+public static String test(String str){
+        return commandLine(str.split(" "));
+}
     public static void main(String[] D) throws Exception {
-//     BufferedReader reader = new BufferedReader( new InputStreamReader(System.in));
-//       String input = reader.readLine();
-//        String[] input2 = D;  //ввод из консоли
-
-//       String input = "ls -l -h -o help C:\\"; //ввод из этой строки
-        System.out.print(commandLine("ls -r -o testOut\\__fr testIn\\Ace_Stream_Media_3.1.2.exe"));
-        System.out.print(commandLine("ls -r -l -o testOut\\l_fr testIn\\Ace_Stream_Media_3.1.2.exe"));
-        System.out.print(commandLine("ls -r -l -h -o testOut\\lhfr testIn\\Ace_Stream_Media_3.1.2.exe"));
-        System.out.print(commandLine("ls -r  -o testOut\\__dr testIn"));
-        System.out.print(commandLine("ls -r -l  -o testOut\\l_dr testIn"));
-        System.out.print(commandLine("ls -r -l -h -o testOut\\lhdr testIn"));
-//      System.out.print(commandLine(D)); //ввод из ком.строки
+      System.out.print(commandLine(D));
     }
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class ls {
 
-    private static String accessBite(File file) {
+    private static String accessByte(File file) {
         String result = new String();
         if (file.canExecute() == true) result += "1";
         else result += "0";
@@ -37,7 +37,7 @@ public class ls {
         else if (size / (1024 * 1024) > 0) return result + (int) (size / 1024 / 1024) + "MB";
         else if (size / 1024 > 0) return result + (int) (size / 1024) + "KB";
         else
-            return result + (size) + "Bait";
+            return result + (size) + "Byte";
     }
 
     private static String sizeFile(File file) {
@@ -48,7 +48,7 @@ public class ls {
     private static String data(File file) {
         Date date = new Date(file.lastModified());
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
-        return "  последние изменение " + sdf.format(date) + "  ";
+        return "  последнее изменение " + sdf.format(date) + "  ";
     }
 
     private static ArrayList<String> builder(File file) {
@@ -73,14 +73,14 @@ public class ls {
                 space += " ";
             list.add(
                     file.getPath() + "\\" + str[i] + space + " " +
-                            accessBite(new File(file.getPath() + "\\" + str[i])) + " "
+                            accessByte(new File(file.getPath() + "\\" + str[i])) + " "
                             + (new File(file.getPath() + "\\" + str[i])).lastModified() + " "
                             + sizeFile(new File(file.getPath() + "\\" + str[i])));
         }
         if (file.isFile()) {
             list.add(
                     file.getPath()  + "  " +
-                            accessBite(file) + " "
+                            accessByte(file) + " "
                             + file.lastModified() + " "
                             + sizeFile(file));
             }
@@ -150,9 +150,11 @@ public class ls {
         }
         return "";
     }
+
 public static String test(String str){
         return commandLine(str.split(" "));
 }
+
     public static void main(String[] D) throws Exception {
       System.out.print(commandLine(D));
     }

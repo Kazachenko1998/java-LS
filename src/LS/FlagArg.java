@@ -31,6 +31,7 @@ public class FlagArg {
                 }
             }
         input = arg[arg.length - 1];
+
     }
 
     public String getInput() {

@@ -13,7 +13,7 @@ public class Tests {
 
     private void assertFileContent(String name, String expectedContent) throws IOException {
         test(name);
-        String content = new String();
+        String content = "";
         try (FileReader reader = new FileReader("outPut")) {
             int c;
             while ((c = reader.read()) != -1) {

@@ -117,7 +117,7 @@ public class ls {
     private static String commandLine(String[] line) {
         FlagArg flagArg = new FlagArg(line);
         if (line.length == 0) throw new IllegalArgumentException("неверная команда");
-        String result = new String();
+        StringBuilder result = new StringBuilder();
         File file = new File(flagArg.getInput());
         String[] str = file.list();
         ArrayList<String> list;
@@ -134,14 +134,14 @@ public class ls {
         if (flagArg.isL()) list = builderL(file);else
             list = builder(file);
         if (flagArg.isR()) for (int i = list.size() - 1; i >= 0; i--)
-            result += list.get(i) + "\n";
+            result.append(list.get(i) + "\n");
         else for (int i = 0; i < list.size(); i++)
-            result += list.get(i) + "\n";
+            result.append(list.get(i) + "\n");
         if (flagArg.getOutput() == null)
-            return result;
+            return result.toString();
         else {
             try (FileWriter writer = new FileWriter(flagArg.getOutput())) {
-                writer.write(result);
+                writer.write(result.toString());
                 writer.flush();
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());

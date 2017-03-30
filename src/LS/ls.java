@@ -140,8 +140,7 @@ public class ls {
         if (flagArg.getOutput() == null)
             return result;
         else {
-            try (
-                    FileWriter writer = new FileWriter(flagArg.getOutput(), false)) {
+            try (FileWriter writer = new FileWriter(flagArg.getOutput())) {
                 writer.write(result);
                 writer.flush();
             } catch (IOException ex) {

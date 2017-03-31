@@ -1,13 +1,13 @@
 package LS;
 
-/**
- * Created by Konstantin on 27.03.2017.
- */
+import java.util.Objects;
+
 public class FlagArg {
     private String input, output;
     private boolean l=false,h=false,r=false;
 
-    public FlagArg(String[] arg){
+    FlagArg(String[] arg){
+
         for (int i = 0; i < arg.length; i++)
             if (arg[i].length() != 0) {
                 switch (arg[i]) {
@@ -23,7 +23,7 @@ public class FlagArg {
                     case "-o": {
                         if (arg.length >= i)
                             output = arg[i + 1];
-                        else throw new IllegalArgumentException("РЅРµРІРµСЂРЅР°СЏ РєРѕРјР°РЅРґР°");
+                        else throw new IllegalArgumentException("неверная команда");
                         break;
                     }
                     default:
@@ -31,18 +31,19 @@ public class FlagArg {
                 }
             }
         input = arg[arg.length - 1];
+        if (Objects.equals(input, output))throw new IllegalArgumentException("неверная команда");
 
     }
 
-    public String getInput() {
+    String getInput() {
         return input;
     }
 
-    public String getOutput() {
+    String getOutput() {
         return output;
     }
 
-    public boolean isL() {
+    boolean isL() {
         return l;
     }
 

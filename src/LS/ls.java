@@ -33,7 +33,7 @@ public class ls {
     private static String sizeFileHuman(File file) {
         long size = file.length();
         String result = "";
-        if (file.isDirectory()) result = "(РџР°РїРєР°) ";
+        if (file.isDirectory()) result = "(Папка) ";
         if (size / (1024 * 1024 * 1024) > 0) return result + (int) (size / 1024 / 1024 / 1024) + "GB";
         else if (size / (1024 * 1024) > 0) return result + (int) (size / 1024 / 1024) + "MB";
         else if (size / 1024 > 0) return result + (int) (size / 1024) + "KB";
@@ -49,7 +49,7 @@ public class ls {
     private static String data(File file) {
         Date date = new Date(file.lastModified());
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
-        return "  РїРѕСЃР»РµРґРЅРµРµ РёР·РјРµРЅРµРЅРёРµ " + sdf.format(date) + "  ";
+        return "  последнее изменение " + sdf.format(date) + "  ";
     }
 
     private static ArrayList<String> builder(File file) {
@@ -71,9 +71,9 @@ public class ls {
         }
         if (file.isDirectory()) {
             for (String aStr : str) {
-                String space = "";
+                StringBuilder space = new StringBuilder();
                 for (int j = aStr.length(); j < size + 1; j++)
-                    space += " ";
+                    space.append(" ");
                 list.add(
                         file.getPath() + "\\" + aStr + space + " " +
                                 accessByte(new File(file.getPath() + "\\" + aStr)) + " "
@@ -101,9 +101,9 @@ public class ls {
         }
         if (file.isDirectory()) {
             for (String aStr : str) {
-                String space = "";
+                StringBuilder space = new StringBuilder();
                 for (int j = aStr.length(); j < size + 1; j++)
-                    space += " ";
+                    space.append(" ");
                 list.add(
                         aStr + space + " " +
                                 accessHuman(new File(file.getPath() + "\\" + aStr)) + " "
@@ -123,12 +123,12 @@ public class ls {
 
     private static String commandLine(String[] line) {
         FlagArg flagArg = new FlagArg(line);
-        if (line.length == 0) throw new IllegalArgumentException("РЅРµРІРµСЂРЅР°СЏ РєРѕРјР°РЅРґР°");
+        if (line.length == 0) throw new IllegalArgumentException("неверная команда");
         StringBuilder result = new StringBuilder();
         File file = new File(flagArg.getInput());
         ArrayList<String> list;
         if (!file.exists())
-            throw new NullPointerException("РЅРµРІРµСЂРЅС‹Р№ РІС…РѕРґРЅРѕР№ РїСѓС‚СЊ");
+            throw new NullPointerException("неверный входной путь");
         if ((flagArg.isH()) && (flagArg.isL())) list = builderLH(file);
         else if (flagArg.isL()) list = builderL(file);
         else
@@ -143,7 +143,7 @@ public class ls {
                 writer.write(result.toString());
                 writer.flush();
             } catch (IOException ex) {
-                System.out.println(ex.getMessage());
+                throw new NullPointerException("неверный выходной путь");
             }
         }
         return "";

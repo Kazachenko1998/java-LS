@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="java:jar">
+    <output-path>$PROJECT_DIR$/bin/</output-path>
+    <root id="archive" name="java.jar">
+      <element id="module-output" name="java" />
+      <element id="extracted-dir" path="$USER_HOME$/OneDrive/Учеба/Информатика/kotlin/KotlinAsFirst2016/.idea/libraries/junit-jupiter-engine-5.0.0-M3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/OneDrive/Учеба/Информатика/kotlin/KotlinAsFirst2016/.idea/libraries/junit-platform-engine-1.0.0-M3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/OneDrive/Учеба/Информатика/kotlin/KotlinAsFirst2016/.idea/libraries/junit-platform-commons-1.0.0-M3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/OneDrive/Учеба/Информатика/kotlin/KotlinAsFirst2016/.idea/libraries/opentest4j-1.0.0-M1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/OneDrive/Учеба/Информатика/kotlin/KotlinAsFirst2016/.idea/libraries/junit-jupiter-api-5.0.0-M3.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src" />
+    </root>
+  </artifact>
+</component>

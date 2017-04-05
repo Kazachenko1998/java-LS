@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class FlagArg {
     private String input, output;
-    private boolean l=false,h=false,r=false;
+    private boolean l = false, h = false, r = false;
 
-    FlagArg(String[] arg){
+    public FlagArg(String[] arg) {
 
         for (int i = 0; i < arg.length; i++)
             if (arg[i].length() != 0) {
@@ -31,15 +31,14 @@ public class FlagArg {
                 }
             }
         input = arg[arg.length - 1];
-        if (Objects.equals(input, output))throw new IllegalArgumentException("неверная команда");
-
+        if (Objects.equals(input, output)) throw new IllegalArgumentException("неверная команда");
     }
 
     String getInput() {
         return input;
     }
 
-    String getOutput() {
+    public String getOutput() {
         return output;
     }
 

@@ -1,105 +1,11 @@
 package LS;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ls {
-
-    interface FileFormatter {
-        String makeString(File f, String spaces);
-    }
-
-    static class FileInterface implements FileFormatter {
-
-        FileInterface() {
-        }
-
-        public String makeString(File file, String string) {
-            return file.getName();
-        }
-    }
-
-    static class FileInterfaceL implements FileFormatter {
-
-
-        FileInterfaceL() {
-        }
-
-        String accessByte(File file) {
-            String result = "";
-            if (file.canExecute()) result += "1";
-            else result += "0";
-            if (file.canRead()) result += "1";
-            else result += "0";
-            if (file.canWrite()) result += "1";
-            else result += "0";
-            return result;
-        }
-
-        String sizeFile(File file) {
-            long size = file.length();
-            return "" + size;
-        }
-
-        @Override
-        public String makeString(File file, String spaces) {
-            return
-                    file.getPath() + spaces + "  " +
-                            accessByte(file) + " "
-                            + file.lastModified() + " "
-                            + sizeFile(file);
-        }
-    }
-
-    static class FileInterfaceLH implements FileFormatter {
-
-
-        FileInterfaceLH() {
-        }
-
-        String data(File file) {
-            Date date = new Date(file.lastModified());
-            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
-            return "  последнее изменение " + sdf.format(date) + "  ";
-        }
-
-
-        String accessHuman(File file) {
-            String result = "";
-            if (file.canExecute()) result += "x";
-            else result += "-";
-            if (file.canRead()) result += "r";
-            else result += "-";
-            if (file.canWrite()) result += "w";
-            else result += "-";
-            return result;
-        }
-
-        String sizeFileHuman(File file) {
-            long size = file.length();
-            String result = "";
-            if (file.isDirectory()) result = "(Папка) ";
-            if (size / (1024 * 1024 * 1024) > 0) return result + (int) (size / 1024 / 1024 / 1024) + "GB";
-            else if (size / (1024 * 1024) > 0) return result + (int) (size / 1024 / 1024) + "MB";
-            else if (size / 1024 > 0) return result + (int) (size / 1024) + "KB";
-            else
-                return result + (size) + "Byte";
-        }
-
-        @Override
-        public String makeString(File file, String spaces) {
-            return
-                    file.getName() + spaces + "  " +
-                            accessHuman(file) + " "
-                            + data(file) + " "
-                            + sizeFileHuman(file);
-        }
-    }
-
     @SuppressWarnings("ConstantConditions")
-    private static ArrayList<String> makeListing(File fileOrDirectory, FileFormatter formatter) {
+    private static ArrayList<String> makeListing(File fileOrDirectory, FileFormat.FileFormatter formatter) {
         ArrayList<String> list = new ArrayList<>();
         String size = "";
         if (fileOrDirectory.isFile()) {
@@ -125,10 +31,10 @@ public class ls {
         ArrayList<String> list;
         if (!file.exists())
             throw new NullPointerException("неверный входной путь");
-        if ((flagArg.isH()) && (flagArg.isL())) list = makeListing(file, new FileInterfaceLH());
-        else if (flagArg.isL()) list = makeListing(file, new FileInterfaceL());
+        if ((flagArg.isH()) && (flagArg.isL())) list = makeListing(file, new FileFormat.FileInterfaceLH());
+        else if (flagArg.isL()) list = makeListing(file, new FileFormat.FileInterfaceL());
         else
-            list = makeListing(file, new FileInterface());
+            list = makeListing(file, new FileFormat.FileInterface());
         if (flagArg.isR()) for (int i = list.size() - 1; i >= 0; i--)
             result.append(list.get(i)).append("\n");
         else for (String aList : list) result.append(aList).append("\n");

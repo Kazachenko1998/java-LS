@@ -134,6 +134,7 @@ class Tests {
     static void deletedFiles() {
         File file = new File("testIn");
     delete(file);
+    delete(new File("outPut"));//слишком часто он остается...
     }
 
     @SuppressWarnings({"ResultOfMethodCallIgnored", "ConstantConditions"})

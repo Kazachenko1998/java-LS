@@ -98,9 +98,8 @@ public class ls {
         }
     }
 
-
     @SuppressWarnings("ConstantConditions")
-    static ArrayList<String> makeListing(File fileOrDirectory, FileFormatter formatter) {
+    private static ArrayList<String> makeListing(File fileOrDirectory, FileFormatter formatter) {
         ArrayList<String> list = new ArrayList<>();
         String size = "";
         if (fileOrDirectory.isFile()) {
@@ -117,7 +116,6 @@ public class ls {
         }
         return list;
     }
-
 
     public static void commandLine(String[] line) throws FileNotFoundException {
         FlagArg flagArg = new FlagArg(line);
@@ -139,9 +137,9 @@ public class ls {
                 pw.print(result.toString());
             }
         } else {
-            try (PrintWriter pw = new PrintWriter(flagArg.getOutput())) {
+            try (PrintWriter pw = new PrintWriter(flagArg.getOutput()))  {
                 pw.print(result.toString());
-            }
+            }catch (java.io.FileNotFoundException ex){throw new IllegalArgumentException("неверное имя выходного файла");}
         }
     }
 

@@ -46,11 +46,11 @@ public class FlagArg {
         return l;
     }
 
-    public boolean isH() {
+    boolean isH() {
         return h;
     }
 
-    public boolean isR() {
+    boolean isR() {
         return r;
     }
 

@@ -1,0 +1,5 @@
+Path C:\Program Files\Java\jdk-9\bin
+javac
+cd C:\Users\MAK\Desktop\ls
+javac -sourcepath ./src -d bin src/ls/ls.java
+java -classpath ./bin LS.ls

@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 
@@ -9,24 +10,180 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 import LS.FlagArg;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Tag;
 
 class Tests {
 
-//    private void assertFileContent(String name, String expectedContent) throws IOException {
-//        test(name);
-//        StringBuilder content = new StringBuilder();
-//        try (FileReader reader = new FileReader("outPut")) {
-//            int c;
-//            while ((c = reader.read()) != -1) {
-//                content.append((char) c);
-//            }
-//        } catch (IOException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//        assertEquals(expectedContent, content.toString());
-//        (new File("outPut")).delete();
+    public static FileWriter setSize(FileWriter writer, long size) throws IOException {
+
+        for (long i=0; i<size; i++){
+            writer.write('a');
+        }
+        return writer;
+    }
+
+    @BeforeAll
+    public static void doYourOneTimeSetup() throws IOException {
+        File destFolder = new File("testIn");
+        boolean ok;
+        FileWriter writer = new FileWriter("Ace_Stream_Media_3.1.2.exe");
+        writer =setSize(writer,79522432);
+        writer.close();
+        File file = new File("Ace_Stream_Media_3.1.2.exe");
+        ok = file.setLastModified(1458311585083L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        writer = new FileWriter("AdbeRdr930_ru_RU.exe");
+        writer =setSize(writer,25879608);
+        writer.close();
+        file = new File("AdbeRdr930_ru_RU.exe");
+        ok = file.setLastModified(1458311585083L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        writer = new FileWriter("atheros_ar5xxx_ar9xxx_wireless_10_0_0_298_whql.zip");
+        writer =setSize(writer,81475851);
+        writer.close();
+        file = new File("atheros_ar5xxx_ar9xxx_wireless_10_0_0_298_whql.zip");
+        ok = file.setLastModified(1458311585083L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        writer = new FileWriter("avast_free_antivirus_setup_online_comss.exe");
+        writer =setSize(writer,5481336);
+        writer.close();
+        file = new File("avast_free_antivirus_setup_online_comss.exe");
+        ok = file.setLastModified(1458311585083L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        writer = new FileWriter("Delphi7_Lite_Full_Setup_v7.3.3.3v3(Build_2010-02-02).exe");
+        writer =setSize(writer,65762043);
+        writer.close();
+        file = new File("Delphi7_Lite_Full_Setup_v7.3.3.3v3(Build_2010-02-02).exe");
+        ok = file.setLastModified(1458311585083L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        writer = new FileWriter("DTLiteInstaller.exe");
+        writer =setSize(writer,1709792);
+        writer.close();
+        file = new File("DTLiteInstaller.exe");
+        ok = file.setLastModified(1458311585083L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        writer = new FileWriter("Git-2.10.0-64-bit.exe");
+        writer =setSize(writer,33049944);
+        writer.close();
+        file = new File("Git-2.10.0-64-bit.exe");
+        ok = file.setLastModified(1458311585083L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        writer = new FileWriter("K-Lite_Codec_Pack_960_Mega.exe");
+        writer =setSize(writer,24222983);
+        writer.close();
+        file = new File("K-Lite_Codec_Pack_960_Mega.exe");
+        ok = file.setLastModified(1458311585083L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        writer = new FileWriter("KMPlayer 2.9.4.1434 Final.exe");
+        writer =setSize(writer,29391072);
+        writer.close();
+        file = new File("KMPlayer 2.9.4.1434 Final.exe");
+        ok = file.setLastModified(1458311585083L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        writer = new FileWriter("mseinstall.exe");
+        writer =setSize(writer,13697208);
+        writer.close();
+        file = new File("mseinstall.exe");
+        ok = file.setLastModified(1458311585083L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        writer = new FileWriter("online-consultant.exe");
+        writer =setSize(writer,15745976);
+        writer.close();
+        file = new File("online-consultant.exe");
+        ok = file.setLastModified(1450679908864L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        file = new File("TeamViewerPortable");
+        ok = file.mkdir();
+        ok = file.setLastModified(1490861124666L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        file = new File("teeworlds-0.5.1-win32");
+        ok = file.mkdir();
+        ok = file.setLastModified(1490861124716L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        file = new File("Tor Browser");
+        ok = file.mkdir();
+        ok = file.setLastModified(1490861151914L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+
+        file = new File("òåìà");
+        ok = file.mkdir();
+        ok = file.setLastModified(1490861167273L);
+        ok = file.renameTo(new File(destFolder, file.getName()));
+//        writer = new FileWriter("lalala");
+//        writer.close();
+//        file = new File("lalala");
+//        ok = file.setLastModified(1438626227247L);
+//        destFolder = new File("testlnn\\TeamViewerPortable");
+//        ok = file.renameTo(new File(destFolder, file.getName()));
+//        writer = new FileWriter("lalala");
+//        writer.close();
+//        file = new File("lalala");
+//        ok = file.setLastModified(1438626227247L);
+//        destFolder = new File("testlnn\\teeworlds-0.5.1-win32");
+//        ok = file.renameTo(new File(destFolder, file.getName()));
+//        writer = new FileWriter("lalala");
+//        writer.close();
+//        file = new File("lalala");
+//        ok = file.setLastModified(1438626227247L);
+//        destFolder = new File("testlnn\\Tor Browser");
+//        ok = file.renameTo(new File(destFolder, file.getName()));
+//        writer = new FileWriter("lalala");
+//        writer.close();
+//        file = new File("lalala");
+//        ok = file.setLastModified(1273572330000L);
+//        destFolder = new File("testlnn\\òåìà");
+//        ok = file.renameTo(new File(destFolder, file.getName()));
+    }
+
+//    testIn\Ace_Stream_Media_3.1.2.exe                                111 1458311585083L 79522432
+//    testIn\AdbeRdr930_ru_RU.exe                                      111 1279732176000L 25879608
+//    testIn\atheros_ar5xxx_ar9xxx_wireless_10_0_0_298_whql.zip        111 1438626227247L 81475851
+//    testIn\avast_free_antivirus_setup_online_comss.exe               111 1438876146121L 5481336
+//    testIn\Delphi7_Lite_Full_Setup_v7.3.3.3v3(Build_2010-02-02).exe  111 1273572330000L 65762043
+//    testIn\DTLiteInstaller.exe                                       111 1438952882607L 1709792
+//    testIn\Git-2.10.0-64-bit.exe                                     111 1473356327247L 33049944
+//    testIn\K-Lite_Codec_Pack_960_Mega.exe                            111 1355557062417L 24222983
+//    testIn\KMPlayer 2.9.4.1434 Final.exe                             111 1338740319172L 29391072
+//    testIn\mseinstall.exe                                            111 1386123358172L 13697208
+//    testIn\online-consultant.exe                                     111 1450679908864L 15745976
+//    testIn\TeamViewerPortable                                        111 1490861124666L 4096
+//    testIn\teeworlds-0.5.1-win32                                     111 1490861124716L 0
+//    testIn\Tor Browser                                               111 1490861151914L 0
+//    testIn\òåìà                                                      111 1490861167273L 4096
+
+    @AfterAll
+    public static void doYourOneTimeTeardown() {
+
+    }
+
+    //    @AfterAll
+//    void libr() throws IOException {
+//       FileWriter writer = new FileWriter("lalala");
+//    writer.close();
+//    File file = new File("lalala");
+//    file.setLastModified(111111111);
+//    }
+//
+//    @BeforeAll
+//    void libr2() throws IOException {
+//    //    File r1 = new File("òåìà");
+//      //  r1.setLastModified(11111111);
 //    }
     private void assertFileContent(String[] name, String expectedContent) throws IOException {
         commandLine(name);

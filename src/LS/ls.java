@@ -1,6 +1,5 @@
 package LS;
 
-
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,49 +7,27 @@ import java.util.Date;
 
 public class ls {
 
-
-    private static void PrintWriter(String file, String out) {
-        if (out == null) System.out.println(file);
-        else {
-            try (FileWriter writer = new FileWriter(out)) {
-                writer.write(file);
-                writer.flush();
-            } catch (IOException ex) {
-                throw new NullPointerException("неверный выходной путь");
-            }
-        }
-    }
-
     interface FileFormatter {
-        String makeString(File f);
-
-        String makeStringL(File f, String space);
-
-        String accessByte(File file);
-
-        String sizeFile(File file);
-
-        String data(File file);
-
-        String makeStringLH(File f, String space);
-
-        String accessHuman(File file);
-
-        String sizeFileHuman(File file);
+        String makeString(File f, String spaces);
     }
 
     static class FileInterface implements FileFormatter {
-        private String str;
 
-        public FileInterface(File file, Integer type, String space) {
-            if (type == 0) str = makeString(file);
-            if (type == 1) str = makeStringL(file, space);
-            if (type == 2) str = makeStringLH(file, space);
+        FileInterface() {
         }
 
+        public String makeString(File file, String string) {
+            return file.getName();
+        }
+    }
 
-        @Override
-        public String accessByte(File file) {
+    static class FileInterfaceL implements FileFormatter {
+
+
+        FileInterfaceL() {
+        }
+
+        String accessByte(File file) {
             String result = "";
             if (file.canExecute()) result += "1";
             else result += "0";
@@ -61,22 +38,35 @@ public class ls {
             return result;
         }
 
-        @Override
-        public String sizeFile(File file) {
+        String sizeFile(File file) {
             long size = file.length();
             return "" + size;
         }
 
         @Override
-        public String data(File file) {
+        public String makeString(File file, String spaces) {
+            return
+                    file.getPath() + spaces + "  " +
+                            accessByte(file) + " "
+                            + file.lastModified() + " "
+                            + sizeFile(file);
+        }
+    }
+
+    static class FileInterfaceLH implements FileFormatter {
+
+
+        FileInterfaceLH() {
+        }
+
+        String data(File file) {
             Date date = new Date(file.lastModified());
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
             return "  последнее изменение " + sdf.format(date) + "  ";
         }
 
 
-        @Override
-        public String accessHuman(File file) {
+        String accessHuman(File file) {
             String result = "";
             if (file.canExecute()) result += "x";
             else result += "-";
@@ -87,8 +77,7 @@ public class ls {
             return result;
         }
 
-        @Override
-        public String sizeFileHuman(File file) {
+        String sizeFileHuman(File file) {
             long size = file.length();
             String result = "";
             if (file.isDirectory()) result = "(Папка) ";
@@ -100,58 +89,37 @@ public class ls {
         }
 
         @Override
-        public String makeStringL(File file, String space) {
+        public String makeString(File file, String spaces) {
             return
-                    file.getPath()+ space + " " +
-                            accessByte(file) + " "
-                            + file.lastModified() + " "
-                            + sizeFile(file);
-        }
-
-        @Override
-        public String makeStringLH(File file, String space) {
-
-            return
-                    file.getName() + space + " " +
+                    file.getName() + spaces + "  " +
                             accessHuman(file) + " "
                             + data(file) + " "
                             + sizeFileHuman(file);
         }
-
-        @Override
-        public String makeString(File file) {
-            return file.getName();
-        }
-
-        @Override
-        public String toString() {
-            return str;
-        }
-
     }
 
 
     @SuppressWarnings("ConstantConditions")
-    public static ArrayList<String> makeListing(File fileOrDirectory, Integer type) {
+    static ArrayList<String> makeListing(File fileOrDirectory, FileFormatter formatter) {
         ArrayList<String> list = new ArrayList<>();
-        int size = 0;
+        String size = "";
         if (fileOrDirectory.isFile()) {
-            list.add(new FileInterface(fileOrDirectory, type, "").toString());
+            list.add(formatter.makeString(fileOrDirectory, ""));
             return list;
         } else {
-            for (String aStr : fileOrDirectory.list()) if (aStr.length() > size) size = aStr.length();
+            for (String aStr : fileOrDirectory.list()) if (aStr.length() > size.length()) size = aStr;
             for (String aStr : fileOrDirectory.list()) {
                 StringBuilder space = new StringBuilder();
-                for (int j = aStr.length(); j < size + 1; j++)
+                for (int j = aStr.length(); j < size.length(); j++)
                     space.append(" ");
-                list.add(new FileInterface(new File(fileOrDirectory.getPath() + "\\" + aStr), type, space.toString()).toString());
+                list.add(formatter.makeString(new File(fileOrDirectory.getPath() + "\\" + aStr), space.toString()));
             }
         }
         return list;
     }
 
 
-    public static void commandLine(String[] line) {
+    public static void commandLine(String[] line) throws FileNotFoundException {
         FlagArg flagArg = new FlagArg(line);
         if (line.length == 0) throw new IllegalArgumentException("неверная команда");
         StringBuilder result = new StringBuilder();
@@ -159,14 +127,22 @@ public class ls {
         ArrayList<String> list;
         if (!file.exists())
             throw new NullPointerException("неверный входной путь");
-        if ((flagArg.isH()) && (flagArg.isL())) list = makeListing(file, 2);
-        else if (flagArg.isL()) list = makeListing(file, 1);
+        if ((flagArg.isH()) && (flagArg.isL())) list = makeListing(file, new FileInterfaceLH());
+        else if (flagArg.isL()) list = makeListing(file, new FileInterfaceL());
         else
-            list = makeListing(file, 0);
+            list = makeListing(file, new FileInterface());
         if (flagArg.isR()) for (int i = list.size() - 1; i >= 0; i--)
             result.append(list.get(i)).append("\n");
         else for (String aList : list) result.append(aList).append("\n");
-        PrintWriter(result.toString(), flagArg.getOutput());
+        if (flagArg.getOutput() == null) {
+            try (PrintWriter pw = new PrintWriter(System.out)) {
+                pw.print(result.toString());
+            }
+        } else {
+            try (PrintWriter pw = new PrintWriter(flagArg.getOutput())) {
+                pw.print(result.toString());
+            }
+        }
     }
 
     public static void main(String[] D) throws Exception {

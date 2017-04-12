@@ -152,6 +152,7 @@ class Tests {
             file.delete();
         }
     }
+
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void assertFileContent(String[] name, String expectedContent) throws IOException {
         commandLine(name);

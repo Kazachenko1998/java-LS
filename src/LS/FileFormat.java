@@ -5,9 +5,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
- class FileFormat {
+class FileFormat {
     interface FileFormatter {
-        String makeString(File f, String spaces);
+        String makeString(File f);
+    }
+
+    private static int space(File file) {
+        int maxString = 0;
+        for (String aStr : file.list()) if (aStr.length() > maxString) maxString = aStr.length();
+        return maxString+file.getPath().length()+1;
     }
 
     static class FileInterface implements FileFormatter {
@@ -15,15 +21,18 @@ import java.util.Date;
         FileInterface() {
         }
 
-        public String makeString(File file, String string) {
+        public String makeString(File file) {
             return file.getName();
         }
     }
 
     static class FileInterfaceL implements FileFormatter {
 
+        int maxString = 0;
 
-        FileInterfaceL() {
+        FileInterfaceL(File file) {
+            if (file.isFile()) this.maxString = 0;
+            else this.maxString = space(file);
         }
 
         String accessByte(File file) {
@@ -43,19 +52,25 @@ import java.util.Date;
         }
 
         @Override
-        public String makeString(File file, String spaces) {
-            return
-                    file.getPath() + spaces + "  " +
-                            accessByte(file) + " "
-                            + file.lastModified() + " "
-                            + sizeFile(file);
+        public String makeString(File file) {
+            StringBuilder spaces = new StringBuilder();
+            for (int i = file.getPath().length(); i < maxString; i++)
+                spaces.append(" ");
+            return file.getPath() + spaces + "  " +
+                    accessByte(file) + " "
+                    + file.lastModified() + " "
+                    + sizeFile(file);
         }
     }
 
     static class FileInterfaceLH implements FileFormatter {
 
 
-        FileInterfaceLH() {
+        int maxString = 0;
+
+        FileInterfaceLH(File file) {
+            if (file.isFile()) this.maxString = 0;
+            else this.maxString = space(file);
         }
 
         String data(File file) {
@@ -88,7 +103,10 @@ import java.util.Date;
         }
 
         @Override
-        public String makeString(File file, String spaces) {
+        public String makeString(File file) {
+            StringBuilder spaces = new StringBuilder();
+            for (int i = file.getPath().length(); i < maxString; i++)
+                spaces.append(" ");
             return
                     file.getName() + spaces + "  " +
                             accessHuman(file) + " "

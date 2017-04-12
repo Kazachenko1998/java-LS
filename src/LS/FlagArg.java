@@ -1,5 +1,6 @@
 package LS;
 
+import java.io.File;
 import java.util.Objects;
 
 public class FlagArg {
@@ -31,6 +32,10 @@ public class FlagArg {
                 }
             }
         input = arg[arg.length - 1];
+        if (!new File(input).exists())
+            throw new NullPointerException("неверный входной путь");
+        if (!new File(output).canWrite())
+            throw new IllegalArgumentException("неверный выходной путь");
         if (Objects.equals(input, output)) throw new IllegalArgumentException("неверная команда");
     }
 
@@ -58,14 +63,12 @@ public class FlagArg {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof FlagArg)) return false;
-
         FlagArg flagArg = (FlagArg) o;
-
-        if (isL() != flagArg.isL()) return false;
-        if (isH() != flagArg.isH()) return false;
-        if (isR() != flagArg.isR()) return false;
-        if (!getInput().equals(flagArg.getInput())) return false;
-        return getOutput().equals(flagArg.getOutput());
+        return isL() == flagArg.isL()
+                && isH() == flagArg.isH()
+                && isR() == flagArg.isR()
+                && getInput().equals(flagArg.getInput())
+                && getOutput().equals(flagArg.getOutput());
     }
 
     @Override

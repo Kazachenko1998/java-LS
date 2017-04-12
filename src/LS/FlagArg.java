@@ -8,7 +8,7 @@ public class FlagArg {
     private boolean l = false, h = false, r = false;
 
     public FlagArg(String[] arg) {
-
+        if (arg.length == 0) throw new IllegalArgumentException("неверная команда");
         for (int i = 0; i < arg.length; i++)
             if (arg[i].length() != 0) {
                 switch (arg[i]) {

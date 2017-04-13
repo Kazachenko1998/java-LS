@@ -33,7 +33,7 @@ public class FlagArg {
             }
         input = arg[arg.length - 1];
         if (!new File(input).exists())
-            throw new NullPointerException("неверный входной путь");
+            throw new IllegalArgumentException("неверный входной путь");
         if (!new File(output).canWrite())
             throw new IllegalArgumentException("неверный выходной путь");
         if (Objects.equals(input, output)) throw new IllegalArgumentException("неверная команда");

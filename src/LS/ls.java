@@ -42,6 +42,9 @@ public class ls {
     }
 
     public static void main(String[] D) throws Exception {
-        commandLine(D);
+       try {commandLine(D);}
+        catch(Exception ex){
+            System.out.println(ex.getMessage());
+           }
     }
 }

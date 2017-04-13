@@ -328,23 +328,6 @@ class Tests {
                 "Ace_Stream_Media_3.1.2.exe1                                xrw   последнее изменение 18.03.2016 05:33:05   75MB\n");
     }
 
-    @Test
-    @Tag("Exception")
-    void Exception() throws IOException {
-        assertThrows(NullPointerException.class, () -> commandLine("-l -h -r testI".split(" ")));
-    }
-
-    @Test
-    @Tag("Exception")
-    void Exception2() throws IOException {
-        assertThrows(IllegalArgumentException.class, () -> commandLine("-l -h -o testIn".split(" ")));
-    }
-
-    @Test
-    @Tag("Exception")
-    void Exception3() throws IOException {
-        assertThrows(IllegalArgumentException.class, () -> commandLine("-l -h -o lala\\lala testIn".split(" ")));
-    }
 //    @Test
 //    @Tag("---d")
 //    void ___d() throws Exception {
